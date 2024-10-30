@@ -1,0 +1,38 @@
+<html>
+<head>
+    <script>
+        window.addEventListener('message', function(event) {
+            console.log('Отримано повідомлення:', event.data);
+            if (event.data && event.data.type === 'image') {
+                convertToBase64(event.data.image);
+            }
+        });
+
+        function convertToBase64(imageData) {
+            try {
+                if (typeof imageData === 'string' && imageData.includes('base64')) {
+                    const base64 = imageData.split(',')[1];
+                    // Показуємо результат на сторінці
+                    document.getElementById('result').innerText = base64;
+                    window.postMessage({ type: 'result', data: base64 }, '*');
+                    console.log('Конвертовано в base64');
+                }
+            } catch (error) {
+                console.error('Помилка конвертації:', error);
+                document.getElementById('result').innerText = 'Помилка: ' + error;
+            }
+        }
+    </script>
+    <style>
+        #result {
+            word-wrap: break-word;
+            padding: 10px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Готовий до конвертації</div>
+    <div id="result"></div>
+</body>
+</html>
